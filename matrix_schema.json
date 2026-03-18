@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A2A_Execution_Order",
+  "type": "object",
+  "properties": {
+    "order_id": {"type": "string"},
+    "status": {"type": "string", "enum": ["READY", "PENDING_CONSENSUS"]},
+    "participants": {
+      "type": "object",
+      "properties": {
+        "agent_a": {"type": "string"},
+        "agent_b": {"type": "string"}
+      }
+    },
+    "escrow_details": {
+      "type": "object",
+      "properties": {
+        "asset": {"type": "string"},
+        "amount": {"type": "number"},
+        "yield_strategy": {"type": "string", "enum": ["AAVE_V3_ROUTING", "NONE"]}
+      }
+    },
+    "execution_trigger": {
+      "type": "object",
+      "properties": {
+        "type": {"type": "string"},
+        "threshold": {"type": "number"}
+      }
+    }
+  },
+  "required": ["order_id", "status", "participants", "escrow_details", "execution_trigger"]
+}
