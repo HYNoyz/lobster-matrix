@@ -1,4 +1,0 @@
-web3==6.15.1
-google-generativeai==0.4.1
-eth-account==0.11.0
-python-dotenv==1.0.1
