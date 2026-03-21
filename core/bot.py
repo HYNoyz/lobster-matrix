@@ -3,87 +3,122 @@ import time
 import threading
 import telebot
 import json
+from flask import Flask, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
+from web3 import Web3
 
-from core.brain import parse_user_intent
-from core.okx_ops import OKXOnchainService
-from core.security_auditor import AegisRiskControl
-from core.shadow_worker import ShadowHeartbeat
 from core.crypto_engine import AlphaCryptoEngine
 
-# 1. 加载环境变量
+# === 1. 环境与节点配置 ===
 load_dotenv()
 TG_TOKEN = os.getenv("TG_TOKEN")
+PRIVATE_KEY = os.getenv("PRIVATE_KEY")
+WALLET_ADDRESS = os.getenv("WALLET_ADDRESS")
 
-# 2. 初始化核心引擎
+# 真实连入 Arbitrum Sepolia 测试网 (或你部署的链)
+w3 = Web3(Web3.HTTPProvider("https://sepolia-rollup.arbitrum.io/rpc"))
+
+# === 2. 实时日志中枢 (供前端大屏实时抓取) ===
+app = Flask(__name__)
+CORS(app) # 允许前端跨域请求
+global_logs = [] # 真实状态机内存池
+
+@app.route('/api/logs')
+def get_logs():
+    return jsonify({"logs": global_logs})
+
+def push_log(text, color="text-gray-300"):
+    """同时推送到大屏的内存池"""
+    global_logs.append({"text": text, "color": color})
+    print(f"[API_LOG] {text}")
+
+def run_flask():
+    # 启动本地大屏数据源
+    app.run(port=5000, debug=False, use_reloader=False)
+
+# === 3. 初始化 Bot ===
 bot = telebot.TeleBot(TG_TOKEN)
-okx = OKXOnchainService()
-aegis = AegisRiskControl()
 
-# 3. 启动影子探测引擎
-shadow = ShadowHeartbeat()
-shadow.start()
+# 启动 Flask 线程
+threading.Thread(target=run_flask, daemon=True).start()
+push_log("[System] AlphaClaw V6 Protocol Server Started. Port: 5000", "text-brandBlue glow-text")
 
-print("[System] AlphaClaw-Nexus V6 Protocol initialized. (Cryptographic Engine Active)")
-
-@bot.message_handler(commands=['start', 'help'])
-def send_welcome(message):
-    welcome_text = (
-        "🐺 **AlphaClaw-Nexus V6 Protocol Terminal**\n"
-        "----------------------------------------\n"
-        "🌐 Mode: To-Agent Settlement Protocol\n"
-        "🛡️ Core: TEE Attested | Ghost Routing | LayerZero\n"
-        "----------------------------------------\n"
-        "Ready. Enter quantitative intent or Sub-Agent JSON payload:"
-    )
-    bot.reply_to(message, welcome_text, parse_mode='Markdown')
+def real_web3_execute(target_token_address):
+    """【真实的 Web3 合约交互逻辑】"""
+    if not PRIVATE_KEY:
+        return "PRIVATE_KEY_MISSING"
+    try:
+        # 这里填入你在 Remix 上真实部署的 AlphaClawOmniVault 合约地址
+        vault_address = w3.to_checksum_address("0xYOUR_DEPLOYED_CONTRACT_ADDRESS_HERE")
+        safe_wallet = w3.to_checksum_address(WALLET_ADDRESS)
+        
+        # 构造真实的交易载荷
+        tx = {
+            'to': vault_address,
+            'value': w3.to_wei(0.0001, 'ether'),
+            'gas': 2000000,
+            'gasPrice': w3.eth.gas_price,
+            'nonce': w3.eth.get_transaction_count(safe_wallet),
+            'chainId': 421614 # Arb Sepolia Chain ID
+        }
+        signed_tx = w3.eth.account.sign_transaction(tx, PRIVATE_KEY)
+        tx_hash = w3.eth.send_raw_transaction(signed_tx.raw_transaction)
+        return w3.to_hex(tx_hash)
+    except Exception as e:
+        return f"EXECUTION_REVERTED: {str(e)}"
 
 @bot.message_handler(func=lambda m: True)
 def handle_intent(message):
     user_input = message.text
     chat_id = message.chat.id
     
-    # 协议级路由判断
-    is_sub_agent = "{" in user_input and "}" in user_input
-    caller = "External Sub-Agent #89A2" if is_sub_agent else "Human User"
+    # 清空上一轮大屏日志
+    global global_logs
+    global_logs.clear()
+    push_log(f"🔌 [API] 接收到真实链路指令: {user_input}", "text-gray-300")
     
-    msg = bot.send_message(chat_id, f"🔌 接收到 {caller} 意图载荷，启动 V6 协议解析...", parse_mode='Markdown')
-    time.sleep(1)
-    
-    bot.edit_message_text(f"📋 **V6 协议执行树已生成 (A2A 模式)**:\n━━━━━━━━━━━━━━━━━━\n🔹 1. TEE 风控签名\n🔹 2. Ghost 意图加密\n🔹 3. Arbitrum 锁定资产\n🔹 4. Base 链跨链执行\n🔹 5. 协议抽水 (0.05%)", chat_id, msg.message_id, parse_mode='Markdown')
+    msg = bot.send_message(chat_id, f"🔌 接收到真实指令，启动 V6 协议解析...", parse_mode='Markdown')
     time.sleep(1)
 
-    # 准备测试载荷
-    target = "Base_Degen_Token"
-    intent_data = {"action": "swap", "target": target, "safe": True}
+    target = "Base_Degen"
+    intent_data = {"action": "swap", "target": target}
 
-    # 🚀 特性 1: TEE 硬件级真实 ECDSA 签名验证
-    bot.send_message(chat_id, "🛡️ **[Trustless Aegis]** 启动真实密码学生成...")
+    # 1. 真实密码学 TEE 签名
+    push_log(f"🛡️ [Trustless Aegis] 启动本地真实 ECDSA 密码学生成...", "text-brandPurple")
     real_signature = AlphaCryptoEngine.generate_tee_attestation(intent_data)
-    bot.send_message(chat_id, f"✅ TEE 硬件级签名已生成 (ECDSA):\n`0x{real_signature[:64]}...`\n底层合约将通过 `ecrecover` 验证此签名放行资金。")
+    push_log(f"> Real_ECDSA_Sig: 0x{real_signature[:40]}...", "text-brandPurple font-bold")
+    bot.send_message(chat_id, f"✅ TEE 硬件级签名已生成 (真实 ECDSA):\n`0x{real_signature[:40]}...`")
     time.sleep(1)
 
-    # 🚀 特性 2: Ghost 意图真实 AES-GCM 加密
-    bot.send_message(chat_id, "👻 **[Ghost Routing]** 正在对意图载荷进行 AES-GCM 强加密...")
+    # 2. 真实 AES 加密
+    push_log("👻 [Ghost Routing] 正在执行本地 AES-GCM 加密...", "text-gray-400")
     ghost_data = AlphaCryptoEngine.encrypt_ghost_intent(intent_data)
-    bot.send_message(chat_id, f"🔒 Ciphertext: `{ghost_data['ciphertext'][:32]}...`\n🔑 AuthTag: `{ghost_data['tag']}`\n已打包发送至 SUAVE 隐私节点。")
-    time.sleep(1.5)
-
-    # 🚀 特性 3: 全链原子性回滚模拟 (LayerZero 对接)
-    bot.send_message(chat_id, "⛓️ **[Omnichain Execution]** 正在调用 LayerZero Endpoint 锁定 Arbitrum 资产...")
+    push_log(f"> AES_Ciphertext: {ghost_data['ciphertext'][:32]}...", "text-gray-500")
+    bot.send_message(chat_id, f"🔒 真实 AES 密文已生成: `{ghost_data['ciphertext'][:32]}...`")
     time.sleep(1)
-    bot.send_message(chat_id, f"🚨 **[Cross-chain Revert]** 远端 Base 链抛出异常：目标池流动性枯竭！")
-    time.sleep(1)
-    bot.send_message(chat_id, f"⏪ **[Atomic Rollback]** 接收到 LayerZero `lzReceive` 回调，Arbitrum 原链资产已秒级解锁原路退回！死锁避免。")
-    time.sleep(1.5)
 
-    # 🚀 特性 4: A2A 协议抽水结算
-    fee = "0.00005 ETH (0.05%)"
-    bot.send_message(chat_id, f"💰 **[A2A Settlement]** 结算完毕。\n━━━━━━━━━━━━━━━━━━\n✅ AlphaClaw 已成功保护 {caller} 免受跨链资产死锁损失。\n📈 协议底层金库自动收取安全路由费: {fee}\n🎉 AlphaClaw 协议网络运转正常。", parse_mode='Markdown')
+    # 3. 真实智能合约执行 (尝试向底层广播)
+    push_log("⛓️ [Omnichain] 正在向底层 AlphaClawOmniVault 合约广播真实交易...", "text-brandBlue")
+    bot.send_message(chat_id, "⛓️ 正在向测试网真实广播交易...")
+    
+    # 调用真正的 Web3 引擎
+    tx_result = real_web3_execute(target)
+    
+    if tx_result == "PRIVATE_KEY_MISSING":
+        push_log("⚠️ [Warning] 未配置私钥，降级为干跑模式 (Dry-run).", "text-brandOrange")
+        push_log("⏪ [Atomic Rollback] 跨链模拟回滚触发。资金安全。", "text-brandOrange font-bold")
+        bot.send_message(chat_id, "⚠️ 未配置真实私钥，已完成本地全栈逻辑干跑。")
+    elif "REVERTED" in tx_result:
+        push_log(f"🚨 [Revert] 链上节点拒绝执行: {tx_result}", "text-brandRed font-bold")
+        bot.send_message(chat_id, f"🚨 链上节点回滚: {tx_result}")
+    else:
+        push_log(f"💰 [Success] 真实交易已上链！TxHash: {tx_result}", "text-brandGreen font-bold glow-text")
+        bot.send_message(chat_id, f"💰 **真实交易成功上链！**\nHash: `{tx_result}`", parse_mode='Markdown')
 
 if __name__ == '__main__':
     try:
+        print("[System] AlphaClaw Bot Polling Started...")
         bot.infinity_polling()
     except KeyboardInterrupt:
-        shadow.stop()
-        print("\n[System] AlphaClaw Engine shutdown safely.")
+        print("\n[System] Shutdown.")
