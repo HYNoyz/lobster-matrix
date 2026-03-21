@@ -1,7 +1,8 @@
 # 🦞 Lobster Matrix
 > The Yield-Enhanced A2A (Agent-to-Agent) Escrow & Settlement Primitive on OKX Onchain OS.
 
-![Lobster Matrix Architecture](https://raw.githubusercontent.com/HYNoyz/lobster-matrix/main/assets/architecture.png)
+![Lobster Matrix Architecture]
+
 *(<img width="1304" height="946" alt="image" src="https://github.com/user-attachments/assets/64f3a449-5d7d-43dc-9c20-dd806c0e16a3" />
 )*
 
