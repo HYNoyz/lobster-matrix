@@ -30,4 +30,4 @@ AlphaClaw 开放了标准化的 Intent-API。未来全网的“行情分析 Agen
 - **协议级智能合约已部署:** 包含 A2A 抽水、zkML 验证修饰器与跨链原语的 `AlphaClawOmniVault.sol` 已开源。
 - **主网实弹 TxHash (Arbitrum):** `0x665a2ff1ce30d62d986c245a1a0387f960d4ca4558a80a1dbdcf24cf46349e98`
 
-*Date: 2026年3月22日 (农历二月初四) | Built for OKX Onchain OS Hackathon*
+*Built for OKX Onchain OS Hackathon*
