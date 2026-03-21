@@ -3,10 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlphaClaw Nexus V6 | Omnichain Protocol</title>
+    <title>AlphaClaw Nexus V6 | Live Omnichain Protocol</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { darkBg: '#09090b', panelBg: '#18181b', brandBlue: '#3b82f6', brandGreen: '#10b981', brandRed: '#ef4444', brandPurple: '#8b5cf6', brandOrange: '#f97316' }, fontFamily: { mono: ['Courier New', 'monospace'] } } } }
+        tailwind.config = { 
+            darkMode: 'class', 
+            theme: { 
+                extend: { 
+                    colors: { 
+                        darkBg: '#09090b', 
+                        panelBg: '#18181b', 
+                        brandBlue: '#3b82f6', 
+                        brandGreen: '#10b981', 
+                        brandRed: '#ef4444', 
+                        brandPurple: '#8b5cf6', 
+                        brandOrange: '#f97316' 
+                    }, 
+                    fontFamily: { 
+                        mono: ['Courier New', 'monospace'] 
+                    } 
+                } 
+            } 
+        }
     </script>
     <style>
         .terminal-scroll::-webkit-scrollbar { width: 4px; }
@@ -24,18 +42,18 @@
             <span class="text-3xl">🐺</span>
             <div>
                 <h1 class="text-2xl font-bold text-white glow-text">AlphaClaw-Nexus <span class="text-brandPurple glow-purple">V6 Protocol</span></h1>
-                <p class="text-xs text-gray-400">A2A Settlement | zkML Verified | Omnichain Ghost Routing</p>
+                <p class="text-xs text-gray-400">Live A2A Settlement | Real-time Cryptography | Omnichain</p>
             </div>
         </div>
         <div class="flex items-center space-x-8">
             <div class="text-right">
-                <p class="text-xs text-gray-500">Connected Sub-Agents</p>
-                <p class="text-lg font-bold text-white">1,204 Nodes</p>
+                <p class="text-xs text-gray-500">Local Backend Link</p>
+                <p class="text-lg font-bold text-white" id="connection-status">Connecting...</p>
             </div>
             <div class="text-right">
                 <p class="text-xs text-gray-500">Network State</p>
                 <p class="text-sm font-bold text-brandGreen flex items-center justify-end">
-                    <span class="h-2 w-2 bg-brandGreen rounded-full mr-2 pulse-dot"></span> LayerZero Synced
+                    <span class="h-2 w-2 bg-brandGreen rounded-full mr-2 pulse-dot"></span> Active Polling
                 </p>
             </div>
         </div>
@@ -44,13 +62,14 @@
     <main class="flex-1 flex p-4 space-x-4 overflow-hidden">
         
         <div class="w-2/3 bg-panelBg border border-gray-800 rounded-lg flex flex-col shadow-2xl">
-            <div class="px-4 py-2 border-b border-gray-800 bg-black bg-opacity-50 flex justify-between">
-                <h2 class="text-sm font-bold text-gray-400">Protocol Live Logs</h2>
-                <span class="text-xs text-brandPurple animate-pulse">Processing Cross-chain Intent...</span>
+            <div class="px-4 py-2 border-b border-gray-800 bg-black bg-opacity-50 flex justify-between items-center">
+                <h2 class="text-sm font-bold text-gray-400">Live Execution Terminal (Synced with TG Bot)</h2>
+                <span class="text-xs text-brandPurple animate-pulse" id="terminal-status">Awaiting Intent...</span>
             </div>
             <div class="flex-1 p-4 overflow-y-auto terminal-scroll text-sm space-y-2 font-mono tracking-tight" id="terminal-logs">
-                <div class="text-brandBlue">[System] AlphaClaw V6 Network Booting...</div>
-                <div class="text-gray-600">--------------------------------------------------</div>
+                <div class="text-brandBlue glow-text">[System] AlphaClaw V6 Dashboard Booted.</div>
+                <div class="text-gray-500">--------------------------------------------------</div>
+                <div class="text-gray-400">Waiting for local Python engine to broadcast logs...</div>
             </div>
         </div>
 
@@ -64,11 +83,11 @@
                         <p class="text-xl font-bold text-brandGreen">14.2 ETH</p>
                     </div>
                     <div class="bg-black bg-opacity-40 p-3 rounded border border-gray-800">
-                        <p class="text-xs text-gray-500">zkML Proofs Generated</p>
+                        <p class="text-xs text-gray-500">zkML / TEE Proofs</p>
                         <p class="text-xl font-bold text-brandPurple">8,492</p>
                     </div>
                     <div class="bg-black bg-opacity-40 p-3 rounded border border-gray-800">
-                        <p class="text-xs text-gray-500">Ghost Intents Routed</p>
+                        <p class="text-xs text-gray-500">Ghost Intents</p>
                         <p class="text-xl font-bold text-brandBlue">12,105</p>
                     </div>
                     <div class="bg-black bg-opacity-40 p-3 rounded border border-gray-800">
@@ -82,19 +101,19 @@
                 <h2 class="text-sm font-bold text-gray-400 mb-4">V6 Protocol Engine</h2>
                 <div class="flex-1 flex flex-col items-center justify-center space-y-2 w-full px-4">
                     <div class="w-full bg-brandBlue bg-opacity-10 border border-brandBlue rounded p-2 text-center text-brandBlue text-xs font-bold glow-text">
-                        1. A2A API Gateway (Receive Intent)
+                        1. TG Bot / API Gateway
                     </div>
                     <div class="h-3 w-px bg-gray-700"></div>
                     <div class="w-full bg-brandPurple bg-opacity-10 border border-brandPurple rounded p-2 text-center text-brandPurple text-xs font-bold glow-purple">
-                        2. TEE Enclave: Generate zkML Proof
+                        2. TEE Enclave: Real ECDSA Sig
                     </div>
                     <div class="h-3 w-px bg-gray-700"></div>
                     <div class="w-full bg-gray-600 bg-opacity-20 border border-gray-500 rounded p-2 text-center text-gray-300 text-xs font-bold">
-                        3. SUAVE: Threshold Encryption (Ghost)
+                        3. Real AES-GCM Encryption
                     </div>
                     <div class="h-3 w-px bg-gray-700"></div>
                     <div class="w-full bg-brandOrange bg-opacity-10 border border-brandOrange rounded p-2 text-center text-brandOrange text-xs font-bold">
-                        4. LayerZero: Omnichain Execution
+                        4. EVM Raw Transaction
                     </div>
                 </div>
             </div>
@@ -103,30 +122,55 @@
     </main>
 
     <script>
-        const logs = [
-            { text: "🔌 [API] 接收到 External Sub-Agent #89A2 的意图载荷请求.", color: "text-gray-300", delay: 800 },
-            { text: "🛡️ [Trustless Aegis] 启动 TEE 环境风控审计 -> 目标: Base_Degen", color: "text-brandPurple", delay: 1500 },
-            { text: "🛡️ [Trustless Aegis] 安全校验通过. 正在生成 zkML 零知识证明...", color: "text-gray-400", delay: 2200 },
-            { text: "> zkML_Proof: 0x9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08", color: "text-brandPurple font-bold break-all", delay: 2500 },
-            { text: "👻 [Ghost Routing] 正在对意图载荷进行门限加密 (Threshold Encryption)...", color: "text-gray-400", delay: 3500 },
-            { text: "> Ciphertext: GHOST_ENC_b10a8db164e07541... 正在路由至 SUAVE 隐私内存池.", color: "text-gray-500", delay: 4000 },
-            { text: "⛓️ [Omnichain] 意图跨链拆解: Arbitrum (Lock) -> Base (Swap).", color: "text-brandBlue", delay: 5000 },
-            { text: "⚠️ [Omnichain] Base 远端链执行异常: DEX 流动性枯竭！", color: "text-brandRed font-bold", delay: 6500 },
-            { text: "⏪ [Atomic Rollback] 跨链信使触发 RevertMessage. Arbitrum 原链资产已秒级解锁原路退回！死锁避免.", color: "text-brandOrange font-bold", delay: 7500 },
-            { text: "💰 [A2A Settlement] AlphaClaw 协议底层智能合约已抽取 0.05% 安全保护费.", color: "text-brandGreen", delay: 8500 },
-            { text: "✅ [System] A2A 结算防线保护成功. 等待下一个 Sub-Agent 请求...", color: "text-brandBlue glow-text", delay: 9000 }
-        ];
-
         const terminal = document.getElementById('terminal-logs');
-        logs.forEach(log => {
-            setTimeout(() => {
-                const div = document.createElement('div');
-                div.className = `${log.color} mt-1`;
-                div.textContent = log.text;
-                terminal.appendChild(div);
-                terminal.scrollTop = terminal.scrollHeight;
-            }, log.delay);
-        });
+        const statusText = document.getElementById('terminal-status');
+        const connStatus = document.getElementById('connection-status');
+        let renderedLogCount = 0;
+
+        async function fetchRealTimeLogs() {
+            try {
+                // 向本地运行的 Python Flask 服务发起请求
+                const response = await fetch('http://127.0.0.1:5000/api/logs');
+                const data = await response.json();
+                
+                connStatus.textContent = "PORT: 5000 (SYNCED)";
+                connStatus.className = "text-lg font-bold text-brandGreen glow-text";
+
+                // 如果后端日志数量比前端少，说明是一次新的指令请求，清屏重置
+                if (data.logs.length < renderedLogCount) {
+                    terminal.innerHTML = '<div class="text-brandBlue">[System] Received new intent. Resetting logs...</div><div class="text-gray-500">--------------------------------------------------</div>';
+                    renderedLogCount = 0;
+                }
+
+                if (data.logs.length > renderedLogCount) {
+                    statusText.textContent = "Processing Onchain Logic...";
+                    statusText.className = "text-xs text-brandOrange animate-pulse";
+                } else if (data.logs.length > 0) {
+                    statusText.textContent = "Standby.";
+                    statusText.className = "text-xs text-gray-500";
+                }
+
+                // 增量渲染新日志
+                for (let i = renderedLogCount; i < data.logs.length; i++) {
+                    const log = data.logs[i];
+                    const div = document.createElement('div');
+                    div.className = `${log.color} mt-1 break-all`;
+                    div.textContent = `> ${log.text}`;
+                    terminal.appendChild(div);
+                    // 自动滚动到底部
+                    terminal.scrollTop = terminal.scrollHeight;
+                }
+                
+                renderedLogCount = data.logs.length;
+
+            } catch (error) {
+                connStatus.textContent = "DISCONNECTED";
+                connStatus.className = "text-lg font-bold text-brandRed";
+            }
+        }
+
+        // 每 800 毫秒向 Python 后端请求一次最新状态
+        setInterval(fetchRealTimeLogs, 800);
     </script>
 </body>
 </html>
