@@ -16,7 +16,12 @@ class OKXOnchainService:
         self.okx_api_url = "https://www.okx.com/api/v5/dex/aggregator/swap"
         
         # 初始化 Web3 节点 (以 Arbitrum 为例，Gas 低，适合测试)
-        self.w3 = Web3(Web3.HTTPProvider("https://arb1.arbitrum.io/rpc"))
+        # 抛弃公共裸奔节点，接入 MEV-Protect 隐私防夹路由
+        # 生产环境中可接入 Flashbots 或 MEV Blocker RPC
+        self.w3 = Web3(Web3.HTTPProvider("https://arbitrum.mev-blocker.io")) 
+        
+        # 如果上述节点在测试网络有延迟，作为备用降级方案保留：
+        # self.w3 = Web3(Web3.HTTPProvider("https://arb1.arbitrum.io/rpc"))
         
         self.wallet_address = os.getenv("WALLET_ADDRESS")
         self.private_key = os.getenv("PRIVATE_KEY")
