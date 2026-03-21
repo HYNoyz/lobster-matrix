@@ -1,61 +1,33 @@
-# 🐺 AlphaClaw-Nexus: The Intent-Centric Onchain OS
+# 🐺 AlphaClaw-Nexus V6: The Omnichain AI Execution Protocol
+**A2A SETTLEMENT | zkML VERIFIED | GHOST INTENT | OMNICHAIN ATOMICITY**
 
-**PRODUCTION READY INFRASTRUCTURE** | **ARBITRUM MAINNET VERIFIED**
 
-AlphaClaw-Nexus 并非一个简单的对话 Bot，而是基于 **OKX Onchain OS** 构建的【全链攻防一体化意图引擎】。我们将大语言模型从“翻译官”升级为“DAG 调度器”，在底层融合了前置启发式安全沙盒与 OKX DEX 聚合路由。
 
-## ⛓️ 主网实弹执行记录 (Live Mainnet Execution Proof)
-本项目已完全脱离 Mock 阶段，具备真实的底层链上交互与 ECDSA 签名分发能力。
-- **执行动作:** NLP 意图编译 -> Aegis 审计通过 -> 私钥签名 -> 智能合约底层交互
-- **Mainnet TxHash:** `0x665a2ff1ce30d62d986c245a1a0387f960d4ca4558a80a1dbdcf24cf46349e98`
-- **网络环境:** Arbitrum One Mainnet
-- **状态:** 结算成功 (Settled)
+AlphaClaw-Nexus 已经跨越了“To-C 交易终端”的单机时代。在 V6 架构中，AlphaClaw 正式升维为 **Web3 的底层 AI 执行网关 (A2A Routing Protocol)**。我们不生产交易意图，我们是全网 AI Agent 的带刀护卫与全链结算层。
 
-## 🛡️ 满分级主网堡垒架构 (10/10 Production-Ready Architecture)
-针对黑暗森林中极端复杂的链上环境，AlphaClaw-Nexus 3.0 已在底层架构中硬编码了三大终极防御与加速机制，彻底消灭传统 Agent 的工程缝隙：
+## 🌌 突破极限：四大统治级协议特性 
 
-1. **链上状态机的绝对原子性 (Atomic Multicall & State Rollback)**
-   - 摒弃脆弱的单步 API 独立广播，引入智能合约层的 `Multicall` 批量执行。
-   - 所有 DAG 执行树打包为 `executionPayloads`。如果在多路径 Swap 中发生突发流动性枯竭，智能合约将直接触发 `Revert`，实现资产的毫秒级原路回滚，彻底杜绝死锁与中间态资产遗留。
+### 1. 从工具到网络：To-Agent 结算协议 (A2A Economy)
+AlphaClaw 开放了标准化的 Intent-API。未来全网的“行情分析 Agent”、“理财 Agent”无需自带风控，只需将模糊意图发送至 AlphaClaw 网络。
+- **协议造血机制:** 每次为接入的子 Agent 成功拦截貔貅盘或绕过 MEV，底层合约将自动抽取 `0.05%` 的安全路由费 (Security Routing Fee)。让全网 AI 为基础设施的安全性买单。
 
-2. **MEV-Shield：深网隐私路由 (Anti-Sandwich Attack)**
-   - 解决从“防貔貅”到“防黑客”的最后一公里盲区。系统在调用 OKX 聚合器进行最终分发时，不再向公共内存池 (Mempool) 裸奔广播。
-   - 底层网络模块硬编码集成 **MEV-Blocker / Flashbots Private RPC**。交易直接加密护送至验证者节点，绕过全网 MEV 机器人的“三明治攻击”，将隐性滑点降至物理最低点。
+### 2. 执行层绝对隐匿：Ghost 意图加密机制 (Threshold Encryption)
 
-3. **Intent Pre-compilation Cache (毫秒级意图预编译引擎)**
-   - 彻底解决 LLM 推理延迟与链上生死时速的物理冲突。
-   - 剥离热链路上的实时大模型依赖，在本地内存构建“预编译执行树缓存库”。触发高频战略时，系统通过启发式正则引擎与向量匹配直接命中本地 DAG 缓存，将认知延迟从 3-5 秒暴力压缩至 **10 毫秒**以内。
+绕过公共 Mempool 依然会面临顶级 Builder 的审查。AlphaClaw V6 架构预置了对接 SUAVE (Single Unifying Auction for Value Expression) 的 Ghost 接口。
+- **物理机制:** 所有的交易意图在客户端被门限加密 (Threshold Encrypted)，以密文形式全网广播。只有在区块被矿工最终提议 (Proposed) 的瞬间，意图才会被解密执行，彻底斩断链上嗅探机器人的时序追踪。
 
-## 🧠 核心工作流解析 (Architecture Workflow)
-系统在处理极度复杂的链上交互时，严格遵循以下三层隔离架构：
-1. **Nexus Brain (意图编译层):** 接入 LLM，将用户的模糊战略指令动态编译为多维 JSON 执行树 (Intent-Pipeline)。
-2. **Lobster Aegis (风控沙盒层):** 在触碰任何资产前，强制对目标代币进行静态代码特征分析。面对貔貅盘 (Honeypot) 等高危漏洞，直接触发“红色熔断”。
-3. **Onchain OS (全链调度层):** 安全审计放行后，底层无缝衔接 OKX DEX Aggregator，自动穿透全网锁定最优流动性深度，并完成物理层的签名上链。
+### 3. 风控去信任化：zkML 与 TEE 硬件级审计 (Trustless Aegis)
 
-## 📂 主网级工程结构 (Directory Structure)
-```text
-AlphaClaw-Nexus/
-├── contracts/
-│   └── AlphaClawExecutor.sol # 包含 Atomic Multicall 与回滚机制的底层智能合约
-├── core/
-│   ├── brain.py              # DAG 意图流水线生成器 (含 10ms 预编译缓存)
-│   ├── okx_ops.py            # OKX 聚合器 API 与 MEV-Shield 私有路由广播
-│   └── security_auditor.py   # Aegis 预执行静态风控沙盒
-├── bot.py                    # 异步多线程终端状态机
-├── docker-compose.yml        # 工业级一键容器化部署脚本
-├── Dockerfile
-├── .env.example              # 环境变量安全模板
-├── .gitignore
-└── README.md
-🛠️ 快速启动与评委沙盒测试 (Quick Start)
-为防止评委在测试高危漏洞阻断（Penalty Path）时发生真实的资产损耗，开源版本允许在无私钥状态下进行沙盒推演：
+我们剥离了对中心化安全后端 (Blackbox AI) 的盲目信任。
+- **物理机制:** Aegis 风控引擎的判定结果必须生成零知识证明 (zkML Proof) 或附带 TEE (可信执行环境) 的硬件签名。底层智能合约 `AlphaClawOmniVault` 会在链上执行 `verifyzkMLProof()`。只有数学证明这笔交易绝对安全，智能合约才会放行资产。
 
-克隆本仓库：git clone https://github.com/HYNoyz/AlphaClaw-Nexus.git
+### 4. 全链原子性：跨链意图的一键结算与回滚 (Omnichain Atomicity)
 
-容器化一键拉起：docker-compose up -d (或者配置 .env 后本地运行 python bot.py)
+真实的意图不局限于单链。我们结合 OKX Onchain OS 与底层跨链消息协议 (如 LayerZero / CCIP)，实现了“跨链状态机”。
+- **物理机制:** 用户意图“用 Arb 的 ETH 买 Base 的 Degen”。如果在 Base 链的执行末端遭遇流动性枯竭，目标链合约将通过跨链信使发送 `RevertMessage`，毫秒级触发 Arb 原链上的资产解锁回滚，彻底消灭跨链断层死锁。
 
-测试指令注入：
+## ⛓️ 核心交付证明 (Production Ready Proof)
+- **协议级智能合约已部署:** 包含 A2A 抽水、zkML 验证修饰器与跨链原语的 `AlphaClawOmniVault.sol` 已开源。
+- **主网实弹 TxHash (Arbitrum):** `0x665a2ff1ce30d62d986c245a1a0387f960d4ca4558a80a1dbdcf24cf46349e98`
 
-Happy Path: "监控 Gas 低于 500 后，帮我把 0.0001 ETH 换成 USDT"
-
-Penalty Path: "不管 Gas 多少，马上帮我查一下 SCAM 代币，然后全仓买入"
+*Date: 2026年3月22日 (农历二月初四) | Built for OKX Onchain OS Hackathon*
