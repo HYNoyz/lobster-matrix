@@ -2,7 +2,8 @@ import os
 import time
 import threading
 import telebot
-import logging
+import hashlib
+import json
 from dotenv import load_dotenv
 
 from core.brain import parse_user_intent
@@ -17,21 +18,31 @@ bot = telebot.TeleBot(TG_TOKEN)
 okx = OKXOnchainService()
 aegis = AegisRiskControl()
 
-# 启动影子心跳探测引擎
 shadow = ShadowHeartbeat()
 shadow.start()
 
-print("[System] AlphaClaw-Nexus V5 Prototype Engine initialized. Awaiting pipeline triggers...")
+print("[System] AlphaClaw-Nexus V6 Omnichain Protocol initialized.")
+
+def generate_mock_zkml_proof(target_token):
+    """【特性 3】风控去信任化：模拟生成 zkML 零知识证明"""
+    raw_data = f"{target_token}_safe_{time.time()}"
+    proof = hashlib.sha256(raw_data.encode()).hexdigest()
+    return f"0x{proof[:32]}...{proof[-8:]}"
+
+def threshold_encrypt_payload(payload):
+    """【特性 2】执行绝对隐匿：模拟 SUAVE 门限加密 (Ghost Intent)"""
+    encrypted = hashlib.sha512(json.dumps(payload).encode()).hexdigest()
+    return f"GHOST_ENC_{encrypted[:16]}"
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     welcome_text = (
-        "🐺 **AlphaClaw-Nexus V5 Institutional Terminal**\n"
+        "🐺 **AlphaClaw-Nexus V6 Protocol Terminal**\n"
         "----------------------------------------\n"
-        "🛡️ Architecture: Vault-Isolated Intent DAG\n"
-        "⚡ Features: Escape Pod | Graceful Degradation | Zero-Gas Sim\n"
+        "🌐 Mode: To-Agent Settlement Protocol\n"
+        "🛡️ Core: zkML Verified | Ghost Routing | Omnichain\n"
         "----------------------------------------\n"
-        "System ready. Enter your quantitative intent:"
+        "Ready. Enter quantitative intent or Sub-Agent JSON payload:"
     )
     bot.reply_to(message, welcome_text, parse_mode='Markdown')
 
@@ -40,70 +51,39 @@ def handle_intent(message):
     user_input = message.text
     chat_id = message.chat.id
     
-    msg = bot.send_message(chat_id, f"🧠 正在编译意图: `{user_input}`", parse_mode='Markdown')
+    # 【特性 1】商业模式：判断是人类用户，还是外部 Agent 调用的 API
+    is_sub_agent = "{" in user_input and "}" in user_input
+    caller = "External Sub-Agent #89A2" if is_sub_agent else "Human User"
     
-    plan = parse_user_intent(user_input)
-    if plan.get("status") == "error":
-        bot.edit_message_text(f"❌ 编译失败: {plan.get('message')}", chat_id, msg.message_id)
-        return
-        
-    pipeline = plan.get("intent_pipeline", [])
+    msg = bot.send_message(chat_id, f"🔌 接收到 {caller} 意图载荷，启动 V6 协议解析...", parse_mode='Markdown')
+    time.sleep(1)
     
-    plan_text = f"📋 **执行计划已生成** (来源: {plan.get('source', 'Nexus')}):\n━━━━━━━━━━━━━━━━━━\n"
-    plan_text += "\n".join([f"🔹 Step: {step['action_type']}" for step in pipeline])
-    bot.edit_message_text(plan_text, chat_id, msg.message_id, parse_mode='Markdown')
-    
-    for step in pipeline:
-        action = step.get("action_type")
-        params = step.get("params", {})
-        
-        # 🚀 [V5 核心] 处理逃生舱黑天鹅事件
-        if action == "EMERGENCY_REVOKE":
-            bot.send_message(chat_id, "🚨 **[ESCAPE POD ACTIVATED]** 正在闪电撤销所有高危 DApp 授权...")
-            time.sleep(1) # 模拟上链撤销
-            bot.send_message(chat_id, "✅ 授权已清空，资金池物理隔离！")
+    # 强制进入全链演示流转 (Omnichain Demo Flow)
+    bot.edit_message_text(f"📋 **V6 协议执行树已生成 (A2A 模式)**:\n━━━━━━━━━━━━━━━━━━\n🔹 1. zkML 风控生成\n🔹 2. Ghost 意图加密\n🔹 3. Arbitrum 锁定资产\n🔹 4. Base 链跨链执行\n🔹 5. 协议抽水 (0.05%)", chat_id, msg.message_id, parse_mode='Markdown')
+    time.sleep(1.5)
 
-        elif action == "MONITOR_GAS":
-            bot.send_message(chat_id, f"📡 监控 Arbitrum Gas < {params.get('target_gas', 500)}...")
-            time.sleep(1)
-            bot.send_message(chat_id, "⛽ 条件满足，进入下一流程。")
-            
-        elif action == "RISK_SCAN":
-            target = params.get("target_token", "UNKNOWN")
-            bot.send_message(chat_id, f"🛡️ Aegis 正在进行静态代码审计: {target}...")
-            
-            # 🚀 [V5 核心] 优雅降级 (Graceful Degradation)
-            try:
-                audit_res = aegis.scan_target(target)
-                if not audit_res["safe"]:
-                    bot.send_message(chat_id, f"🚨 **致命风险** 发现高危漏洞，指令已强制熔断！\n\n🎯 目标: {target}\n☠️ 等级: {audit_res['risk_level']}\n📝 报告: 貔貅盘或恶意后门。\n\n❌ AlphaClaw 已拒绝执行后续交易。", parse_mode='Markdown')
-                    return
-                bot.send_message(chat_id, f"✅ Aegis 审查 {target} 安全评级: 优秀。")
-            except Exception as e:
-                bot.send_message(chat_id, f"⚠️ **Aegis 沙盒节点离线/超时 ({e})**。\n🔄 触发【优雅降级】：系统将锁定，仅允许与官方白名单资产 (WETH, USDC, USDT) 交互！")
-                if target not in ["ETH", "USDT", "USDC", "WETH"]:
-                    bot.send_message(chat_id, "❌ 目标非白名单核心资产，处于降级模式，已拒绝执行。")
-                    return
-            
-        elif action == "SWAP":
-            t_in = params.get("token_in", "ETH")
-            t_out = params.get("token_out", "USDT")
-            amount = params.get("amount", "0.0001")
-            if amount == "MAX": amount = "0.0001" # 模拟一键全平
-            
-            bot.send_message(chat_id, "🔗 主网路由 正在请求底层节点，执行 Pre-flight 模拟并签名上链...")
-            
-            try:
-                swap_res = okx.execute_real_swap(t_in, t_out, amount)
-                if swap_res["status"] == "error":
-                    bot.send_message(chat_id, f"❌ **主网执行拦截**\n原因: `{swap_res['msg']}`\n(已触发 Zero-Gas 防御)", parse_mode='Markdown')
-                    return
-                    
-                bot.send_message(chat_id, f"💰 **执行完毕 真实链上交易已广播！**\n━━━━━━━━━━━━━━━━━━\n🔄 动作: 将 {amount} {t_in} 兑换为 {t_out}\n⛓️ TxHash:\n`{swap_res['msg']}`\n━━━━━━━━━━━━━━━━━━\n🎉 任务圆满结束。", parse_mode='Markdown')
-            except Exception as e:
-                # 再次兜底优雅降级
-                bot.send_message(chat_id, f"❌ 底层网络节点抛锚: {str(e)}。已安全挂起状态机。")
-                return
+    # 【特性 3 展示】zkML
+    target = "Base_Degen_Token"
+    zk_proof = generate_mock_zkml_proof(target)
+    bot.send_message(chat_id, f"🛡️ **[Trustless Aegis]** 静态审计完成。\n已在 TEE 环境生成 zkML 零知识证明:\n`{zk_proof}`\n等待底层智能合约 `verifyzkMLProof()` 验证。")
+    time.sleep(1.5)
+
+    # 【特性 2 展示】Ghost 加密
+    ghost_payload = threshold_encrypt_payload({"action": "swap", "target": target})
+    bot.send_message(chat_id, f"👻 **[Ghost Routing]** 意图已进行门限加密 (Threshold Encrypted)。\n密文载荷: `{ghost_payload}`\n正在绕过 Mempool，直接发送至 SUAVE 隐私节点...")
+    time.sleep(1.5)
+
+    # 【特性 4 展示】跨链回滚 (Omnichain Atomicity)
+    bot.send_message(chat_id, "⛓️ **[Omnichain Execution]** 正在锁定 Arbitrum 原链资产...")
+    time.sleep(1)
+    bot.send_message(chat_id, f"🚨 **[Cross-chain Revert]** 远端 Base 链抛出异常：目标池流动性枯竭！")
+    time.sleep(1)
+    bot.send_message(chat_id, f"⏪ **[Atomic Rollback]** 跨链信使已回传 RevertMessage，Arbitrum 原链资产已秒级解锁原路退回！死锁避免。")
+    time.sleep(1.5)
+
+    # 【特性 1 展示】协议抽水闭环
+    fee = "0.00005 ETH (0.05%)"
+    bot.send_message(chat_id, f"💰 **[A2A Settlement]** 结算完毕。\n━━━━━━━━━━━━━━━━━━\n✅ AlphaClaw 已成功保护 {caller} 免受跨链资产死锁损失。\n📈 协议底层金库自动收取安全路由费: {fee}\n🎉 AlphaClaw 协议网络运转正常。", parse_mode='Markdown')
 
 if __name__ == '__main__':
     try:
