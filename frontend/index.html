@@ -3,113 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlphaClaw Nexus | Institutional Terminal</title>
+    <title>AlphaClaw Nexus V6 | Omnichain Protocol</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        darkBg: '#0b0e14',
-                        panelBg: '#151921',
-                        brandBlue: '#3b82f6',
-                        brandGreen: '#10b981',
-                        brandRed: '#ef4444',
-                    },
-                    fontFamily: {
-                        mono: ['Courier New', 'Courier', 'monospace'],
-                    }
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { darkBg: '#09090b', panelBg: '#18181b', brandBlue: '#3b82f6', brandGreen: '#10b981', brandRed: '#ef4444', brandPurple: '#8b5cf6', brandOrange: '#f97316' }, fontFamily: { mono: ['Courier New', 'monospace'] } } } }
     </script>
     <style>
-        .terminal-scroll::-webkit-scrollbar { width: 6px; }
-        .terminal-scroll::-webkit-scrollbar-track { background: #0b0e14; }
-        .terminal-scroll::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 3px; }
-        .glow-text { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
-        .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        .terminal-scroll::-webkit-scrollbar { width: 4px; }
+        .terminal-scroll::-webkit-scrollbar-thumb { background: #3b82f6; }
+        .glow-text { text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
+        .glow-purple { text-shadow: 0 0 10px rgba(139, 92, 246, 0.6); }
+        .pulse-dot { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
     </style>
 </head>
 <body class="bg-darkBg text-gray-300 font-mono h-screen flex flex-col overflow-hidden">
 
-    <header class="border-b border-gray-800 bg-panelBg px-6 py-4 flex justify-between items-center">
+    <header class="border-b border-gray-800 bg-panelBg px-6 py-4 flex justify-between items-center shadow-lg">
         <div class="flex items-center space-x-4">
-            <span class="text-2xl">🐺</span>
+            <span class="text-3xl">🐺</span>
             <div>
-                <h1 class="text-xl font-bold text-white glow-text">AlphaClaw-Nexus V5</h1>
-                <p class="text-xs text-gray-500">ERC-4337 Intent-centric Onchain OS</p>
+                <h1 class="text-2xl font-bold text-white glow-text">AlphaClaw-Nexus <span class="text-brandPurple glow-purple">V6 Protocol</span></h1>
+                <p class="text-xs text-gray-400">A2A Settlement | zkML Verified | Omnichain Ghost Routing</p>
             </div>
         </div>
-        <div class="flex items-center space-x-6">
+        <div class="flex items-center space-x-8">
             <div class="text-right">
-                <p class="text-xs text-gray-400">Mainnet Status</p>
-                <p class="text-sm font-bold text-brandGreen flex items-center justify-end">
-                    <span class="h-2 w-2 bg-brandGreen rounded-full mr-2 pulse-dot"></span> Arbitrum One
-                </p>
+                <p class="text-xs text-gray-500">Connected Sub-Agents</p>
+                <p class="text-lg font-bold text-white">1,204 Nodes</p>
             </div>
             <div class="text-right">
-                <p class="text-xs text-gray-400">Shadow Heartbeat</p>
-                <p class="text-sm font-bold text-brandBlue">SYNCED (10ms)</p>
+                <p class="text-xs text-gray-500">Network State</p>
+                <p class="text-sm font-bold text-brandGreen flex items-center justify-end">
+                    <span class="h-2 w-2 bg-brandGreen rounded-full mr-2 pulse-dot"></span> LayerZero Synced
+                </p>
             </div>
         </div>
     </header>
 
     <main class="flex-1 flex p-4 space-x-4 overflow-hidden">
         
-        <div class="w-2/3 bg-panelBg border border-gray-800 rounded-lg flex flex-col">
-            <div class="px-4 py-2 border-b border-gray-800 bg-[#1a1f29] rounded-t-lg">
-                <h2 class="text-sm font-bold text-gray-400">Live Execution Terminal</h2>
+        <div class="w-2/3 bg-panelBg border border-gray-800 rounded-lg flex flex-col shadow-2xl">
+            <div class="px-4 py-2 border-b border-gray-800 bg-black bg-opacity-50 flex justify-between">
+                <h2 class="text-sm font-bold text-gray-400">Protocol Live Logs</h2>
+                <span class="text-xs text-brandPurple animate-pulse">Processing Cross-chain Intent...</span>
             </div>
-            <div class="flex-1 p-4 overflow-y-auto terminal-scroll text-sm space-y-2" id="terminal-logs">
-                <div class="text-brandBlue">[System] AlphaClaw Engine initialized. Awaiting pipeline triggers...</div>
-                <div class="text-gray-500">--------------------------------------------------</div>
-                </div>
+            <div class="flex-1 p-4 overflow-y-auto terminal-scroll text-sm space-y-2 font-mono tracking-tight" id="terminal-logs">
+                <div class="text-brandBlue">[System] AlphaClaw V6 Network Booting...</div>
+                <div class="text-gray-600">--------------------------------------------------</div>
+            </div>
         </div>
 
         <div class="w-1/3 flex flex-col space-y-4">
             
-            <div class="bg-panelBg border border-gray-800 rounded-lg p-4">
-                <h2 class="text-sm font-bold text-gray-400 mb-4">Institutional Metrics</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-darkBg p-3 rounded border border-gray-800">
-                        <p class="text-xs text-gray-500">MEV Shield Saved</p>
-                        <p class="text-lg font-bold text-brandGreen">+$12,450.00</p>
+            <div class="bg-panelBg border border-gray-800 rounded-lg p-4 shadow-xl">
+                <h2 class="text-sm font-bold text-gray-400 mb-4 border-b border-gray-800 pb-2">Protocol Treasury (A2A Revenue)</h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-black bg-opacity-40 p-3 rounded border border-gray-800">
+                        <p class="text-xs text-gray-500">Security Routing Fees</p>
+                        <p class="text-xl font-bold text-brandGreen">14.2 ETH</p>
                     </div>
-                    <div class="bg-darkBg p-3 rounded border border-gray-800">
-                        <p class="text-xs text-gray-500">Zero-Gas Reverts</p>
-                        <p class="text-lg font-bold text-brandBlue">142</p>
+                    <div class="bg-black bg-opacity-40 p-3 rounded border border-gray-800">
+                        <p class="text-xs text-gray-500">zkML Proofs Generated</p>
+                        <p class="text-xl font-bold text-brandPurple">8,492</p>
                     </div>
-                    <div class="bg-darkBg p-3 rounded border border-gray-800">
-                        <p class="text-xs text-gray-500">Honeypots Blocked</p>
-                        <p class="text-lg font-bold text-brandRed">89</p>
+                    <div class="bg-black bg-opacity-40 p-3 rounded border border-gray-800">
+                        <p class="text-xs text-gray-500">Ghost Intents Routed</p>
+                        <p class="text-xl font-bold text-brandBlue">12,105</p>
                     </div>
-                    <div class="bg-darkBg p-3 rounded border border-gray-800">
-                        <p class="text-xs text-gray-500">Cache Hit Rate</p>
-                        <p class="text-lg font-bold text-white">98.5%</p>
+                    <div class="bg-black bg-opacity-40 p-3 rounded border border-gray-800">
+                        <p class="text-xs text-gray-500">Cross-chain Reverts</p>
+                        <p class="text-xl font-bold text-brandOrange">342</p>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-panelBg border border-gray-800 rounded-lg p-4 flex-1 flex flex-col">
-                <h2 class="text-sm font-bold text-gray-400 mb-4">Active DAG Pipeline</h2>
-                <div class="flex-1 flex flex-col items-center justify-center space-y-2">
-                    <div class="w-full bg-brandBlue bg-opacity-10 border border-brandBlue rounded p-2 text-center text-brandBlue text-sm glow-text">
-                        1. Intent Parsing (10ms)
+            <div class="bg-panelBg border border-gray-800 rounded-lg p-4 flex-1 flex flex-col shadow-xl">
+                <h2 class="text-sm font-bold text-gray-400 mb-4">V6 Protocol Engine</h2>
+                <div class="flex-1 flex flex-col items-center justify-center space-y-2 w-full px-4">
+                    <div class="w-full bg-brandBlue bg-opacity-10 border border-brandBlue rounded p-2 text-center text-brandBlue text-xs font-bold glow-text">
+                        1. A2A API Gateway (Receive Intent)
                     </div>
-                    <div class="h-4 w-px bg-gray-600"></div>
-                    <div class="w-full bg-brandGreen bg-opacity-10 border border-brandGreen rounded p-2 text-center text-brandGreen text-sm">
-                        2. Lobster Aegis Sandbox
+                    <div class="h-3 w-px bg-gray-700"></div>
+                    <div class="w-full bg-brandPurple bg-opacity-10 border border-brandPurple rounded p-2 text-center text-brandPurple text-xs font-bold glow-purple">
+                        2. TEE Enclave: Generate zkML Proof
                     </div>
-                    <div class="h-4 w-px bg-gray-600"></div>
-                    <div class="w-full bg-purple-500 bg-opacity-10 border border-purple-500 rounded p-2 text-center text-purple-400 text-sm">
-                        3. Pre-flight Simulation (0 Gas)
+                    <div class="h-3 w-px bg-gray-700"></div>
+                    <div class="w-full bg-gray-600 bg-opacity-20 border border-gray-500 rounded p-2 text-center text-gray-300 text-xs font-bold">
+                        3. SUAVE: Threshold Encryption (Ghost)
                     </div>
-                    <div class="h-4 w-px bg-gray-600"></div>
-                    <div class="w-full bg-yellow-500 bg-opacity-10 border border-yellow-500 rounded p-2 text-center text-yellow-400 text-sm">
-                        4. MEV-Shield Private Route
+                    <div class="h-3 w-px bg-gray-700"></div>
+                    <div class="w-full bg-brandOrange bg-opacity-10 border border-brandOrange rounded p-2 text-center text-brandOrange text-xs font-bold">
+                        4. LayerZero: Omnichain Execution
                     </div>
                 </div>
             </div>
@@ -119,27 +104,25 @@
 
     <script>
         const logs = [
-            { text: "[User] 帮我把 0.0001 ETH 换成 USDT", color: "text-white", delay: 1000 },
-            { text: "[Brain] 命中本地意图预编译缓存 (Cache Hit: 8ms)...", color: "text-gray-400", delay: 1500 },
-            { text: "[Brain] DAG Pipeline 生成完毕.", color: "text-brandBlue", delay: 1800 },
-            { text: "[Aegis] 触发静态沙盒扫描 -> USDT (0xFd08...)", color: "text-yellow-400", delay: 2500 },
-            { text: "[Aegis] 安全审计通过. 无恶意提权后门.", color: "text-brandGreen", delay: 3500 },
-            { text: "[Pre-flight] 启动底层零成本模拟 (eth_estimateGas)...", color: "text-purple-400", delay: 4200 },
-            { text: "[Pre-flight] 模拟畅通! 预估 Gas: 124,000 wei.", color: "text-brandGreen", delay: 5000 },
-            { text: "[Onchain OS] 正在组装 Atomic Multicall Payload...", color: "text-gray-400", delay: 5500 },
-            { text: "[MEV-Shield] 交易已加密发送至 Flashbots 隐私节点.", color: "text-brandBlue", delay: 6500 },
-            { text: "💰 [Success] 结算完成! Arbitrum TxHash:", color: "text-brandGreen", delay: 8500 },
-            { text: "0x665a2ff1ce30d62d986c245a1a0387f960d4ca4558a80a1dbdcf24cf46349e98", color: "text-white font-bold", delay: 8500 }
+            { text: "🔌 [API] 接收到 External Sub-Agent #89A2 的意图载荷请求.", color: "text-gray-300", delay: 800 },
+            { text: "🛡️ [Trustless Aegis] 启动 TEE 环境风控审计 -> 目标: Base_Degen", color: "text-brandPurple", delay: 1500 },
+            { text: "🛡️ [Trustless Aegis] 安全校验通过. 正在生成 zkML 零知识证明...", color: "text-gray-400", delay: 2200 },
+            { text: "> zkML_Proof: 0x9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08", color: "text-brandPurple font-bold break-all", delay: 2500 },
+            { text: "👻 [Ghost Routing] 正在对意图载荷进行门限加密 (Threshold Encryption)...", color: "text-gray-400", delay: 3500 },
+            { text: "> Ciphertext: GHOST_ENC_b10a8db164e07541... 正在路由至 SUAVE 隐私内存池.", color: "text-gray-500", delay: 4000 },
+            { text: "⛓️ [Omnichain] 意图跨链拆解: Arbitrum (Lock) -> Base (Swap).", color: "text-brandBlue", delay: 5000 },
+            { text: "⚠️ [Omnichain] Base 远端链执行异常: DEX 流动性枯竭！", color: "text-brandRed font-bold", delay: 6500 },
+            { text: "⏪ [Atomic Rollback] 跨链信使触发 RevertMessage. Arbitrum 原链资产已秒级解锁原路退回！死锁避免.", color: "text-brandOrange font-bold", delay: 7500 },
+            { text: "💰 [A2A Settlement] AlphaClaw 协议底层智能合约已抽取 0.05% 安全保护费.", color: "text-brandGreen", delay: 8500 },
+            { text: "✅ [System] A2A 结算防线保护成功. 等待下一个 Sub-Agent 请求...", color: "text-brandBlue glow-text", delay: 9000 }
         ];
 
         const terminal = document.getElementById('terminal-logs');
-        let currentTime = 0;
-
         logs.forEach(log => {
             setTimeout(() => {
                 const div = document.createElement('div');
-                div.className = log.color;
-                div.textContent = `> ${log.text}`;
+                div.className = `${log.color} mt-1`;
+                div.textContent = log.text;
                 terminal.appendChild(div);
                 terminal.scrollTop = terminal.scrollHeight;
             }, log.delay);
