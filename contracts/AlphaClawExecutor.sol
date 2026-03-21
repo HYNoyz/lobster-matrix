@@ -1,61 +1,58 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-contract AlphaClawExecutor {
-    address public immutable aegisSignerNode;
-    mapping(address => uint256) public userNonces;
+/**
+ * @title AlphaClaw Margin Vault (V5 Prototype)
+ * @dev 解决无限授权黑洞：用户资金物理隔离，Agent 仅拥有受限交易权，无提现权。
+ */
+contract AlphaClawVault {
+    address public immutable owner;          // 巨鲸/用户本人 (拥有唯一提现权)
+    address public immutable agentExecutor;  // AlphaClaw 调度器 (只有交易权)
 
-    event IntentExecuted(address indexed user, bytes[] results);
-    event AegisInterception(address indexed user, string reason);
+    mapping(address => uint256) public balances;
 
-    constructor(address _aegisSignerNode) {
-        require(_aegisSignerNode != address(0), "Invalid Node");
-        aegisSignerNode = _aegisSignerNode;
+    event Deposited(address token, uint256 amount);
+    event Withdrawn(address token, uint256 amount);
+    event ExecutedByAgent(address target, uint256 value);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Vault: Only Owner");
+        _;
     }
 
-    // 核心升级：引入原子性批量执行 (Atomic Multicall)
-    function executeAtomicDAG(
-        bytes[] calldata executionPayloads,
-        uint256 deadline,
-        bytes memory aegisSignature
-    ) external payable {
-        require(block.timestamp <= deadline, "AlphaClaw: Intent expired");
-
-        // 1. 防篡改验证：校验整个 DAG Payload 数组的哈希
-        bytes32 payloadHash = keccak256(abi.encode(executionPayloads));
-        bytes32 messageHash = keccak256(
-            abi.encodePacked(msg.sender, payloadHash, userNonces[msg.sender], deadline)
-        );
-        bytes32 ethSignedMessageHash = keccak256(
-            abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash)
-        );
-
-        require(recoverSigner(ethSignedMessageHash, aegisSignature) == aegisSignerNode, "AlphaClaw: Aegis Clearance Failed");
-        userNonces[msg.sender] += 1;
-
-        // 2. 原子性执行：任何一个 payload 失败，整个交易 Revert
-        bytes[] memory results = new bytes[](executionPayloads.length);
-        for (uint256 i = 0; i < executionPayloads.length; i++) {
-            (bool success, bytes memory result) = address(this).delegatecall(executionPayloads[i]);
-            require(success, "AlphaClaw: DAG execution failed, rolling back entire state");
-            results[i] = result;
-        }
-
-        emit IntentExecuted(msg.sender, results);
+    modifier onlyAgent() {
+        require(msg.sender == agentExecutor, "Vault: Only AlphaClaw Agent");
+        _;
     }
 
-    // ECDSA 恢复逻辑保持不变
-    function recoverSigner(bytes32 _ethSignedMessageHash, bytes memory _signature) internal pure returns (address) {
-        (bytes32 r, bytes32 s, uint8 v) = splitSignature(_signature);
-        return ecrecover(_ethSignedMessageHash, v, r, s);
+    constructor(address _agentExecutor) {
+        owner = msg.sender;
+        agentExecutor = _agentExecutor;
     }
 
-    function splitSignature(bytes memory sig) internal pure returns (bytes32 r, bytes32 s, uint8 v) {
-        require(sig.length == 65, "Invalid signature length");
-        assembly {
-            r := mload(add(sig, 32))
-            s := mload(add(sig, 64))
-            v := byte(0, mload(add(sig, 96)))
-        }
+    // 巨鲸存入高频弹药
+    function deposit() external payable {
+        balances[address(0)] += msg.value;
+        emit Deposited(address(0), msg.value);
+    }
+
+    // AlphaClaw Agent 发起交易 (例如调用 DEX Router)
+    // 即使 Agent 逻辑被黑客挟持，也无法将钱转给自己，因为只允许 call 操作
+    function executeTrade(address target, bytes calldata data, uint256 value) external onlyAgent {
+        require(balances[address(0)] >= value, "Vault: Insufficient margin");
+        balances[address(0)] -= value;
+        
+        (bool success, ) = target.call{value: value}(data);
+        require(success, "Vault: Trade execution failed");
+        
+        emit ExecutedByAgent(target, value);
+    }
+
+    // 巨鲸随时一键抽离资金
+    function emergencyWithdraw(uint256 amount) external onlyOwner {
+        require(balances[address(0)] >= amount, "Vault: Insufficient balance");
+        balances[address(0)] -= amount;
+        payable(owner).transfer(amount);
+        emit Withdrawn(address(0), amount);
     }
 }
