@@ -50,3 +50,15 @@ py final.py
 
 # Mac/Linux 环境
 python3 final.py
+
+### 🐳 工业级一键部署 (Docker Deployment)
+为了实现跨平台的绝对一致性与极简复现，本协议已全面容器化。无需配置任何 Python 宿主机环境：
+
+1. 克隆金库并进入目录：
+   `git clone https://github.com/HYNoyz/AlphaClaw-Nexus.git && cd AlphaClaw-Nexus`
+2. 注入环境变量：
+   将你的 TG Bot Token 与 测试私钥填入 `.env` 文件。
+3. 引擎点火：
+   `docker-compose up -d --build`
+
+此时，底层中枢已在隔离容器中静默运行。直接打开 `frontend/index.html`，大屏即刻连通。
